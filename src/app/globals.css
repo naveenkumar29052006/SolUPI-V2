@@ -143,6 +143,15 @@
     transform-style: preserve-3d;
   }
   
+  /* Force white text for auth buttons when transparent */
+  .auth-button-text.transparent {
+    color: #FFFFFF !important;
+  }
+  
+  .auth-button-text.transparent * {
+    color: #FFFFFF !important;
+  }
+  
   /* Navbar hover effects */
   .navbar-hover-border {
     position: relative;

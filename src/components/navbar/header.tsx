@@ -1,8 +1,8 @@
 'use client'
 import Link from 'next/link'
-import { Logo } from '@/components/logo'
+import { Logo } from '@/components/branding/logo'
 import { Menu, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/forms/button'
 import React from 'react'
 import { cn } from '@/lib/utils'
 

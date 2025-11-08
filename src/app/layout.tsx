@@ -1,6 +1,6 @@
-import "./globals.css";
-import LiquidEther from "@/components/LiquidEther";
-import { HeroHeader } from "@/components/header";
+import "../styles/globals.css";
+import LiquidEther from "@/components/liquid-ether";
+import { HeroHeader } from "@/components/navbar/header";
 import type { ReactNode } from "react";
 
 export default function RootLayout({ children }: { children: ReactNode }) {

@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/forms/button'
 import { ArrowRight, Eye, EyeOff } from 'lucide-react'
-import { CometCard } from '@/components/ui/comet-card'
+import { CometCard } from '@/components/ui/cards/comet-card'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AnimatedCheckbox } from '@/components/ui/animated-checkbox'
+import { AnimatedCheckbox } from '@/components/ui/animations/animated-checkbox'
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')

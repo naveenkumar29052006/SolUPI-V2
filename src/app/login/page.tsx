@@ -5,12 +5,18 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { CometCard } from '@/components/ui/comet-card'
+import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatedCheckbox } from '@/components/ui/animated-checkbox'
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [rememberMe, setRememberMe] = useState(false)
+    
+    // Check if form is complete
+    const isFormComplete = email && password
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -86,17 +92,13 @@ export default function LoginPage() {
 
                         {/* Remember me and Forgot password */}
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                                <input
-                                    id="remember-me"
-                                    name="remember-me"
-                                    type="checkbox"
-                                    className="h-4 w-4 rounded border-white/20 bg-white/10 text-blue-600 focus:ring-blue-500"
-                                />
-                                <label htmlFor="remember-me" className="ml-2 text-sm text-gray-300">
-                                    Remember me
-                                </label>
-                            </div>
+                            <AnimatedCheckbox
+                                id="remember-me"
+                                name="remember-me"
+                                checked={rememberMe}
+                                onChange={setRememberMe}
+                                label="Remember me"
+                            />
 
                             <Link
                                 href="/forgot-password"
@@ -108,31 +110,73 @@ export default function LoginPage() {
                         </div>
 
                         {/* Submit Button */}
-                        <Button
+                        <motion.button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                            className={`relative w-full font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none overflow-hidden ${!isFormComplete ? 'auth-button-text transparent' : ''}`}
                             style={{
-                                background: email && password 
-                                    ? 'linear-gradient(90deg, #00FFA3, #03E1FF)' 
-                                    : 'rgba(255, 255, 255, 0.1)',
-                                border: email && password 
-                                    ? 'none' 
-                                    : '1px solid rgba(255, 255, 255, 0.2)'
+                                border: !isFormComplete ? '1px solid rgba(255, 255, 255, 0.2)' : 'none',
+                                background: !isFormComplete ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                                color: isFormComplete ? '#000000' : '#FFFFFF'
                             }}
+                            whileHover={{ scale: !isLoading ? 1.02 : 1 }}
+                            whileTap={{ scale: !isLoading ? 0.98 : 1 }}
                         >
-                            {isLoading ? (
-                                <div className="flex items-center justify-center">
-                                    <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
-                                    Signing in...
-                                </div>
-                            ) : (
-                                <div className="flex items-center justify-center">
-                                    Sign in
-                                    <ArrowRight className="ml-2 h-4 w-4" />
-                                </div>
-                            )}
-                        </Button>
+                            {/* Animated gradient background */}
+                            <AnimatePresence>
+                                {isFormComplete && (
+                                    <motion.div
+                                        className="absolute inset-0 bg-gradient-to-r from-[#00FFA3] to-[#03E1FF] rounded-xl"
+                                        initial={{ 
+                                            x: "-100%",
+                                            opacity: 0
+                                        }}
+                                        animate={{ 
+                                            x: "0%",
+                                            opacity: 1
+                                        }}
+                                        exit={{ 
+                                            x: "100%",
+                                            opacity: 0
+                                        }}
+                                        transition={{ 
+                                            duration: 0.8,
+                                            ease: [0.4, 0.0, 0.2, 1]
+                                        }}
+                                    />
+                                )}
+                            </AnimatePresence>
+                            
+                            {/* Button content */}
+                            <div 
+                                className="relative z-10 flex items-center justify-center"
+                                style={{
+                                    color: isFormComplete ? '#000000' : '#FFFFFF',
+                                    textShadow: isFormComplete ? '0 1px 2px rgba(0,0,0,0.1)' : 'none'
+                                }}
+                            >
+                                {isLoading ? (
+                                    <>
+                                        <div 
+                                            className="w-5 h-5 rounded-full animate-spin mr-2"
+                                            style={{
+                                                border: '2px solid',
+                                                borderColor: isFormComplete 
+                                                    ? 'rgba(0,0,0,0.2)'
+                                                    : 'rgba(255,255,255,0.2)',
+                                                borderTopColor: isFormComplete ? '#000000' : '#FFFFFF'
+                                            }}
+                                        />
+                                        Signing in...
+                                    </>
+                                ) : (
+                                    <>
+                                        Sign in
+                                        <ArrowRight className="ml-2 h-4 w-4" />
+                                    </>
+                                )}
+                            </div>
+                        </motion.button>
                     </form>
                     </div>
                 </CometCard>

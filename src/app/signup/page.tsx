@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Eye, EyeOff, Check } from 'lucide-react'
 import { CometCard } from '@/components/ui/comet-card'
+import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatedCheckbox } from '@/components/ui/animated-checkbox'
 
 export default function SignUpPage() {
     const [formData, setFormData] = useState({
@@ -18,6 +20,12 @@ export default function SignUpPage() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [agreedToTerms, setAgreedToTerms] = useState(false)
+    
+    // Check if all form fields are filled (excluding terms checkbox)
+    const areAllFieldsFilled = formData.firstName && formData.lastName && formData.email && formData.password && formData.confirmPassword
+    
+    // Check if form is complete (all fields + terms agreement for button activation)
+    const isFormComplete = areAllFieldsFilled && agreedToTerms
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -196,57 +204,94 @@ export default function SignUpPage() {
 
                         {/* Terms and Conditions */}
                         <div className="flex items-start">
-                            <div className="flex items-center h-4">
-                                <input
-                                    id="terms"
-                                    name="terms"
-                                    type="checkbox"
-                                    checked={agreedToTerms}
-                                    onChange={(e) => setAgreedToTerms(e.target.checked)}
-                                    className="h-3 w-3 rounded border-white/20 bg-white/10 text-blue-600 focus:ring-blue-500"
-                                />
-                            </div>
-                            <div className="ml-2 text-xs">
-                                <label htmlFor="terms" className="text-gray-300">
-                                    I agree to the{' '}
-                                    <Link href="/terms" className="transition-colors" style={{color: '#03E1FF'}}>
-                                        Terms of Service
-                                    </Link>{' '}
-                                    and{' '}
-                                    <Link href="/privacy" className="transition-colors" style={{color: '#03E1FF'}}>
-                                        Privacy Policy
-                                    </Link>
-                                </label>
-                            </div>
+                            <AnimatedCheckbox
+                                id="terms"
+                                name="terms"
+                                checked={agreedToTerms}
+                                onChange={setAgreedToTerms}
+                                label={
+                                    <span className="text-xs">
+                                        I agree to the{' '}
+                                        <Link href="/terms" className="transition-colors" style={{color: '#03E1FF'}}>
+                                            Terms of Service
+                                        </Link>{' '}
+                                        and{' '}
+                                        <Link href="/privacy" className="transition-colors" style={{color: '#03E1FF'}}>
+                                            Privacy Policy
+                                        </Link>
+                                    </span>
+                                }
+                            />
                         </div>
 
                         {/* Submit Button */}
-                        <Button
+                        <motion.button
                             type="submit"
                             disabled={isLoading || !agreedToTerms}
-                            className="w-full text-white font-medium py-2 px-4 text-sm rounded-lg transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                            className={`relative w-full font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none overflow-hidden ${!areAllFieldsFilled ? 'auth-button-text transparent' : ''}`}
                             style={{
-                                background: formData.firstName && formData.lastName && formData.email && formData.password && formData.confirmPassword && agreedToTerms
-                                    ? 'linear-gradient(90deg, #00FFA3, #03E1FF)' 
-                                    : 'rgba(255, 255, 255, 0.1)',
-                                border: formData.firstName && formData.lastName && formData.email && formData.password && formData.confirmPassword && agreedToTerms
-                                    ? 'none' 
-                                    : '1px solid rgba(255, 255, 255, 0.2)',
-                                color: 'white'
+                                border: !areAllFieldsFilled ? '1px solid rgba(255, 255, 255, 0.2)' : 'none',
+                                background: !areAllFieldsFilled ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                                color: areAllFieldsFilled ? '#000000' : '#FFFFFF'
                             }}
+                            whileHover={{ scale: !isLoading && agreedToTerms ? 1.02 : 1 }}
+                            whileTap={{ scale: !isLoading && agreedToTerms ? 0.98 : 1 }}
                         >
-                            {isLoading ? (
-                                <div className="flex items-center justify-center">
-                                    <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
-                                    Creating account...
-                                </div>
-                            ) : (
-                                <div className="flex items-center justify-center" style={{color: 'white'}}>
-                                    Create account
-                                    <ArrowRight className="ml-2 h-4 w-4" style={{color: 'white'}} />
-                                </div>
-                            )}
-                        </Button>
+                            {/* Animated gradient background */}
+                            <AnimatePresence>
+                                {areAllFieldsFilled && (
+                                    <motion.div
+                                        className="absolute inset-0 bg-gradient-to-r from-[#00FFA3] to-[#03E1FF] rounded-xl"
+                                        initial={{ 
+                                            x: "-100%",
+                                            opacity: 0
+                                        }}
+                                        animate={{ 
+                                            x: "0%",
+                                            opacity: 1
+                                        }}
+                                        exit={{ 
+                                            x: "100%",
+                                            opacity: 0
+                                        }}
+                                        transition={{ 
+                                            duration: 0.8,
+                                            ease: [0.4, 0.0, 0.2, 1]
+                                        }}
+                                    />
+                                )}
+                            </AnimatePresence>
+                            
+                            {/* Button content */}
+                            <div 
+                                className="relative z-10 flex items-center justify-center"
+                                style={{
+                                    color: areAllFieldsFilled ? '#000000' : '#FFFFFF',
+                                    textShadow: areAllFieldsFilled ? '0 1px 2px rgba(0,0,0,0.1)' : 'none'
+                                }}
+                            >
+                                {isLoading ? (
+                                    <>
+                                        <div 
+                                            className="w-5 h-5 rounded-full animate-spin mr-2"
+                                            style={{
+                                                border: '2px solid',
+                                                borderColor: areAllFieldsFilled 
+                                                    ? 'rgba(0,0,0,0.2)'
+                                                    : 'rgba(255,255,255,0.2)',
+                                                borderTopColor: areAllFieldsFilled ? '#000000' : '#FFFFFF'
+                                            }}
+                                        />
+                                        Creating account...
+                                    </>
+                                ) : (
+                                    <>
+                                        Create account
+                                        <ArrowRight className="ml-2 h-4 w-4" />
+                                    </>
+                                )}
+                            </div>
+                        </motion.button>
                     </form>
                     </div>
                 </CometCard>

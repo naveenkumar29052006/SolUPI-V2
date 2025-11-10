@@ -21,13 +21,37 @@ export default function LoginPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
-        
-        // Simulate API call
-        setTimeout(() => {
-            console.log('Login attempt:', { email, password })
-            alert('Login functionality will be implemented with backend!')
+
+        try {
+            const response = await fetch("/api/auth/login", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            })
+
+            const data = await response.json()
+
+            if (data.success) {
+                if (data.token) {
+                    localStorage.setItem("auth-token", data.token)
+                }
+                alert("Login successful!")
+                // Add redirect here:
+                // router.push('/dashboard')
+            } else {
+                alert(data.error || "Login failed")
+            }
+        } catch (err) {
+            console.error("Login error:", err)
+            alert("Something went wrong!")
+        } finally {
             setIsLoading(false)
-        }, 1000)
+        }
     }
 
     return (

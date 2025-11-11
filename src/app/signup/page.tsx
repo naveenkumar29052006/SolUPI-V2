@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/forms/button'
 import { ArrowRight, Eye, EyeOff, Check } from 'lucide-react'
-import { CometCard } from '@/components/ui/cards/comet-card'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AnimatedCheckbox } from '@/components/ui/animations/animated-checkbox'
 
@@ -94,8 +93,7 @@ export default function SignUpPage() {
         <div className="min-h-screen flex items-center justify-center px-6 py-12 pt-20 relative pointer-events-auto">
             <div className="w-full max-w-sm space-y-6 relative z-10">
                 {/* Signup Form */}
-                <CometCard rotateDepth={12} translateDepth={15}>
-                    <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-2xl">
+                <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-2xl">
                     <div className="text-center mb-6">
                         <h2 className="text-2xl font-bold text-white">Create your account</h2>
                     </div>
@@ -324,8 +322,7 @@ export default function SignUpPage() {
                             </div>
                         </motion.button>
                     </form>
-                    </div>
-                </CometCard>
+                </div>
 
                 {/* Login link */}
                 <div className="text-center">

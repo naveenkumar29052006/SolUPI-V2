@@ -1,0 +1,42 @@
+/* Utility Classes */
+@layer utilities {
+  /* 3D Transform utilities for CometCard */
+  .perspective-distant {
+    perspective: 1200px;
+  }
+  
+  .transform-3d {
+    transform-style: preserve-3d;
+  }
+  
+  /* Force white text for auth buttons when transparent */
+  .auth-button-text.transparent {
+    color: #FFFFFF !important;
+  }
+  
+  .auth-button-text.transparent * {
+    color: #FFFFFF !important;
+  }
+  
+  /* Navbar hover effects */
+  .navbar-hover-border {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .navbar-hover-border::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--brand-surge-green), var(--brand-ocean-blue), var(--brand-purple-dino));
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .navbar-hover-border:hover::after {
+    transform: translateX(0);
+  }
+}

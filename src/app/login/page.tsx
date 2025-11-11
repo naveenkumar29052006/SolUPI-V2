@@ -2,11 +2,10 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/forms/button'
 import { ArrowRight, Eye, EyeOff } from 'lucide-react'
-import { CometCard } from '@/components/ui/comet-card'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AnimatedCheckbox } from '@/components/ui/animated-checkbox'
+import { AnimatedCheckbox } from '@/components/ui/animations/animated-checkbox'
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
@@ -21,21 +20,44 @@ export default function LoginPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
-        
-        // Simulate API call
-        setTimeout(() => {
-            console.log('Login attempt:', { email, password })
-            alert('Login functionality will be implemented with backend!')
+
+        try {
+            const response = await fetch("/api/auth/login", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            })
+
+            const data = await response.json()
+
+            if (data.success) {
+                if (data.token) {
+                    localStorage.setItem("auth-token", data.token)
+                }
+                alert("Login successful!")
+                // Add redirect here:
+                // router.push('/dashboard')
+            } else {
+                alert(data.error || "Login failed")
+            }
+        } catch (err) {
+            console.error("Login error:", err)
+            alert("Something went wrong!")
+        } finally {
             setIsLoading(false)
-        }, 1000)
+        }
     }
 
     return (
         <div className="min-h-screen flex items-center justify-center px-6 py-12 relative pointer-events-auto">
             <div className="w-full max-w-sm space-y-6 relative z-10">
                 {/* Login Form */}
-                <CometCard rotateDepth={12} translateDepth={15}>
-                    <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-2xl">
+                <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-2xl">
                     <div className="text-center mb-6">
                         <h2 className="text-2xl font-bold text-white">Welcome back</h2>
                         <p className="mt-2 text-sm text-gray-300">Sign in to your account to continue</p>
@@ -178,8 +200,7 @@ export default function LoginPage() {
                             </div>
                         </motion.button>
                     </form>
-                    </div>
-                </CometCard>
+                </div>
 
                 {/* Sign up link */}
                 <div className="text-center">

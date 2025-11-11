@@ -2,11 +2,10 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/forms/button'
 import { ArrowRight, Eye, EyeOff, Check } from 'lucide-react'
-import { CometCard } from '@/components/ui/comet-card'
 import { motion, AnimatePresence } from 'framer-motion'
-import { AnimatedCheckbox } from '@/components/ui/animated-checkbox'
+import { AnimatedCheckbox } from '@/components/ui/animations/animated-checkbox'
 
 export default function SignUpPage() {
     const [formData, setFormData] = useState({
@@ -37,34 +36,64 @@ export default function SignUpPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
-        
-        // Basic validation
-        if (formData.password !== formData.confirmPassword) {
-            alert('Passwords do not match!')
-            setIsLoading(false)
-            return
-        }
-        
-        if (!agreedToTerms) {
-            alert('Please agree to the Terms of Service!')
-            setIsLoading(false)
-            return
-        }
 
-        // Simulate API call
-        setTimeout(() => {
-            console.log('Signup attempt:', formData)
-            alert('Signup functionality will be implemented with backend!')
+        if(formData.password !==formData.confirmPassword){
+            alert("Passwords dont match")
             setIsLoading(false)
-        }, 1000)
-    }
+            return 
+        }
+        
+
+        try{
+
+            const response = await fetch("/api/auth/signup",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body: JSON.stringify({
+                    firstName:formData.firstName,
+                    lastName:formData.lastName,
+                    email:formData.email,
+                    password:formData.password
+                })
+            })
+
+            const data = await response.json()
+
+            if (data.success){
+                if(data.token){
+                    localStorage.setItem("auth-token",data.token)
+                }
+
+                alert("Account created successfully")
+
+            }
+            else{
+                alert(data.error || "Signup failed")
+            }
+
+            
+
+        }
+        catch(error){
+
+            console.log("Signup error " , error)
+            alert("Something went worng")
+                
+            }
+
+            finally{
+                setIsLoading(false)
+            }}
+
+
 
     return (
         <div className="min-h-screen flex items-center justify-center px-6 py-12 pt-20 relative pointer-events-auto">
             <div className="w-full max-w-sm space-y-6 relative z-10">
                 {/* Signup Form */}
-                <CometCard rotateDepth={12} translateDepth={15}>
-                    <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-2xl">
+                <div className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-6 shadow-2xl">
                     <div className="text-center mb-6">
                         <h2 className="text-2xl font-bold text-white">Create your account</h2>
                     </div>
@@ -83,7 +112,7 @@ export default function SignUpPage() {
                                     value={formData.firstName}
                                     onChange={handleChange}
                                     className="w-full px-3 py-2 text-sm bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                    placeholder="John"
+                                    placeholder="Naveen"
                                 />
                             </div>
                             <div>
@@ -98,7 +127,7 @@ export default function SignUpPage() {
                                     value={formData.lastName}
                                     onChange={handleChange}
                                     className="w-full px-3 py-2 text-sm bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                    placeholder="Doe"
+                                    placeholder="Kumar"
                                 />
                             </div>
                         </div>
@@ -117,7 +146,7 @@ export default function SignUpPage() {
                                 value={formData.email}
                                 onChange={handleChange}
                                 className="w-full px-3 py-2 text-sm bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                placeholder="john@example.com"
+                                placeholder="nn03092005@gmail.com"
                             />
                         </div>
 
@@ -293,8 +322,7 @@ export default function SignUpPage() {
                             </div>
                         </motion.button>
                     </form>
-                    </div>
-                </CometCard>
+                </div>
 
                 {/* Login link */}
                 <div className="text-center">

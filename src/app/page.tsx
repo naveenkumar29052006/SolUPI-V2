@@ -1,92 +1,121 @@
-export default function HomePage() {
+'use client';
+
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { PartnersStrip } from '@/components/ui/partners-strip';
+import { FeaturesGrid } from '@/components/ui/features-grid';
+import { ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Testimonials } from '@/components/ui/testimonials';
+import { Footer } from '@/components/ui/footer';
+import { BackgroundVideo } from '@/components/ui/background-video';
+import { FAQ } from '@/components/ui/faq';
+
+export default function Home() {
   return (
-    <div className="min-h-screen">
-      {/* Main Hero Section */}
-      <main className="flex items-center justify-center px-6 py-20">
-        <div className="text-center max-w-4xl mx-auto">
-          {/* Hero Title */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            The web, made fluid at your fingertips.
+    <div className="min-h-screen bg-[#181818] text-white overflow-x-hidden selection:bg-[#CCFF00] selection:text-black font-rajdhani">
+
+
+      {/* Hero Section - Animated Sequence (Frames 1-10) */}
+      <section id="home" className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden min-h-screen flex items-center">
+
+        {/* Background Video from Photos */}
+        <div className="absolute inset-x-0 bottom-0 top-[4.5rem] z-0">
+          <BackgroundVideo />
+        </div>
+
+        <div className="absolute bottom-8 left-6 z-10 flex flex-col items-start md:bottom-12 md:left-12">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[0.9] tracking-tighter uppercase mb-6 text-left font-monument">
+            <motion.span
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="block mb-2 text-[#f0fbcd]"
+            >
+              BUY USDC ON SOLANA
+            </motion.span>
+            <motion.span
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="block text-[#f0fbcd]"
+            >
+              INSTANTLY WITH UPI
+            </motion.span>
           </h1>
-          
-          {/* Subheading */}
-          <p className="text-lg md:text-xl text-white/80 mb-12 max-w-2xl mx-auto">
-            Experience dynamic motion powered by Three.js.
-          </p>
 
-          {/* Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            {/* Primary Button */}
-            <button className="px-8 py-4 bg-white text-black font-semibold rounded-full text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(139,69,255,0.6)] hover:scale-105 min-w-[160px] pointer-events-auto">
-              Get Started
-            </button>
-            
-            {/* Secondary Button */}
-            <button className="px-8 py-4 bg-transparent border border-white/30 text-white font-semibold rounded-full text-lg transition-all duration-300 hover:border-white hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 min-w-[160px] pointer-events-auto">
-              Learn More
-            </button>
-          </div>
-        </div>
-      </main>
-
-      {/* Additional content sections to make page scrollable */}
-      <section className="px-6 py-20">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
-            Features
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-6 bg-white/5 rounded-lg backdrop-blur-sm">
-              <h3 className="text-xl font-semibold text-white mb-4">Fluid Motion</h3>
-              <p className="text-white/70">Experience smooth, interactive fluid dynamics powered by WebGL shaders.</p>
-            </div>
-            <div className="p-6 bg-white/5 rounded-lg backdrop-blur-sm">
-              <h3 className="text-xl font-semibold text-white mb-4">Responsive Design</h3>
-              <p className="text-white/70">Optimized for all devices with seamless mobile and desktop experiences.</p>
-            </div>
-            <div className="p-6 bg-white/5 rounded-lg backdrop-blur-sm">
-              <h3 className="text-xl font-semibold text-white mb-4">Modern Tech</h3>
-              <p className="text-white/70">Built with Next.js, TypeScript, and Three.js for cutting-edge performance.</p>
-            </div>
-          </div>
+          <motion.div
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+          >
+            <Link href="/swap">
+              <button className="group relative inline-flex items-center justify-center px-8 py-3 bg-[#CCFF00] text-black font-bold text-lg uppercase tracking-wider clip-path-button hover:bg-[#D4FF00] transition-all duration-300 hover:shadow-[0_0_30px_rgba(204,255,0,0.5)] font-monument">
+                <span className="relative z-10">BUY NOW</span>
+                <div className="absolute inset-0 bg-white/40 translate-x-full group-hover:translate-x-0 transition-transform duration-300 skew-x-12"></div>
+              </button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
-      <section className="px-6 py-20">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
-            About the Technology
-          </h2>
-          <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
-            This interactive background uses WebGL fragment shaders to simulate fluid dynamics in real-time. 
-            The effect responds to your mouse movements and touch gestures, creating a truly immersive experience.
-          </p>
-          <div className="grid md:grid-cols-2 gap-8 mt-12">
-            <div className="text-left">
-              <h3 className="text-2xl font-bold text-white mb-4">WebGL Shaders</h3>
-              <p className="text-white/70 mb-4">
-                Custom fragment and vertex shaders create the fluid simulation with advanced physics calculations 
-                running directly on your GPU for smooth 60fps performance.
-              </p>
-            </div>
-            <div className="text-left">
-              <h3 className="text-2xl font-bold text-white mb-4">Interactive Physics</h3>
-              <p className="text-white/70 mb-4">
-                Mouse and touch interactions generate forces that propagate through the fluid medium, 
-                creating realistic ripples and distortions that feel natural and responsive.
+      {/* Partners Section */}
+      <PartnersStrip />
+
+      {/* What is XOTC Section */}
+      <section className="py-24 px-6 relative bg-[#181818]">
+        <div className="max-w-6xl mx-auto relative">
+          {/* Background Frame */}
+          <div className="relative w-full aspect-[16/9] md:aspect-[2/1] flex items-center justify-center">
+            <Image
+              src="/ff.png"
+              alt="What is SolUPI Background"
+              fill
+              className="object-fill"
+              priority
+            />
+
+            {/* Content Overlay */}
+            <div className="relative z-10 text-center px-8 md:px-20 max-w-4xl mx-auto">
+              <h2 className="text-4xl md:text-6xl font-bold uppercase mb-6 text-[#f0fbcd] tracking-tighter font-monument">
+                WHAT IS <span className="text-[#CCFF00]">SOLUPI</span>
+              </h2>
+              <p className="text-white text-lg md:text-2xl leading-relaxed font-medium tracking-wide">
+                SolUPI is the fastest and most affordable way to buy USDC on Solana using UPI.
+                <br className="hidden md:block" />
+                It connects Indian UPI payments to Solana’s lightning-fast blockchain, enabling instant, trusted, and fully transparent USDC purchases without middlemen or inflated fees.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      <footer className="px-6 py-12 border-t border-white/10">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-white/60">
-            © 2025 React Bits. Powered by Next.js, Three.js, and WebGL.
-          </p>
+      {/* Features Grid Section */}
+      <section id="about" className="py-24 px-6 bg-[#0F0F0F] relative overflow-hidden">
+        <div className="absolute inset-0 tech-grid opacity-20"></div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold uppercase mb-4 font-monument">WHY USE <span className="text-[#CCFF00]">SOLUPI?</span></h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">The most secure and efficient way to trade tokens directly.</p>
+          </div>
+
+          <FeaturesGrid />
         </div>
-      </footer>
+      </section>
+
+      {/* FAQ Section */}
+      <FAQ />
+
+      {/* Testimonials Section */}
+      <div id="community">
+        <Testimonials />
+      </div>
+
+      {/* Footer */}
+      <div id="contact">
+        <Footer />
+      </div>
     </div>
   );
 }

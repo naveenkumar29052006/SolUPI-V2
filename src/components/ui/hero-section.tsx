@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/forms/button'
 import Image from 'next/image'
 import { TextEffect } from '@/components/ui/effects/text-effect'
 import { AnimatedGroup } from '@/components/ui/animations/animated-group'
-import { HeroHeader } from '../navbar/header'
+import { Navbar as HeroHeader } from '../navbar/header'
 
 const transitionVariants = {
     item: {
@@ -86,7 +86,7 @@ export default function HeroSection() {
                                 <AnimatedGroup variants={transitionVariants}>
                                     <Link
                                         href="#link"
-                                        className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-zinc-950">
+                                        className="bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-zinc-950">
                                         <span className="text-white text-sm">Introducing Support for AI Models</span>
                                         <span className="dark:border-background block h-4 w-0.5 border-l bg-white dark:bg-zinc-700"></span>
 
@@ -140,7 +140,7 @@ export default function HeroSection() {
                                             asChild
                                             size="lg"
                                             className="rounded-xl px-5 text-base text-white border-0"
-                                            style={{background: 'linear-gradient(90deg, #00FFA3, #03E1FF)'}}>
+                                            style={{ background: 'linear-gradient(90deg, #CCFF00, #D4FF00)' }}>
                                             <Link href="/signup">
                                                 <span className="text-nowrap">Get Started</span>
                                             </Link>

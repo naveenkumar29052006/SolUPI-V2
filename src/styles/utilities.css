@@ -1,29 +1,30 @@
 /* Utility Classes */
 @layer utilities {
+
   /* 3D Transform utilities for CometCard */
   .perspective-distant {
     perspective: 1200px;
   }
-  
+
   .transform-3d {
     transform-style: preserve-3d;
   }
-  
+
   /* Force white text for auth buttons when transparent */
   .auth-button-text.transparent {
     color: #FFFFFF !important;
   }
-  
+
   .auth-button-text.transparent * {
     color: #FFFFFF !important;
   }
-  
+
   /* Navbar hover effects */
   .navbar-hover-border {
     position: relative;
     overflow: hidden;
   }
-  
+
   .navbar-hover-border::after {
     content: '';
     position: absolute;
@@ -35,8 +36,120 @@
     transform: translateX(-100%);
     transition: transform 0.3s ease;
   }
-  
+
   .navbar-hover-border:hover::after {
     transform: translateX(0);
+  }
+
+  /* XOTC Cyberpunk Utilities */
+
+  /* Tech Grid Pattern - Lime Green */
+  .tech-grid {
+    background-image:
+      linear-gradient(rgba(204, 255, 0, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(204, 255, 0, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .tech-grid-lg {
+    background-image:
+      linear-gradient(rgba(204, 255, 0, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(204, 255, 0, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Neon Glow Effect */
+  .neon-glow {
+    box-shadow:
+      0 0 10px rgba(204, 255, 0, 0.5),
+      0 0 20px rgba(204, 255, 0, 0.3),
+      0 0 30px rgba(204, 255, 0, 0.1);
+  }
+
+  .neon-glow-strong {
+    box-shadow:
+      0 0 15px rgba(204, 255, 0, 0.7),
+      0 0 30px rgba(204, 255, 0, 0.5),
+      0 0 45px rgba(204, 255, 0, 0.3);
+  }
+
+  /* Diagonal Corner Cuts */
+  .corner-cut {
+    clip-path: polygon(0 0,
+        calc(100% - 20px) 0,
+        100% 20px,
+        100% 100%,
+        20px 100%,
+        0 calc(100% - 20px));
+  }
+
+  .corner-cut-sm {
+    clip-path: polygon(0 0,
+        calc(100% - 10px) 0,
+        100% 10px,
+        100% 100%,
+        10px 100%,
+        0 calc(100% - 10px));
+  }
+
+  /* Button Clip Path */
+  .clip-path-button {
+    clip-path: polygon(10px 0,
+        100% 0,
+        100% calc(100% - 10px),
+        calc(100% - 10px) 100%,
+        0 100%,
+        0 10px);
+  }
+
+  /* Animations */
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin-reverse-slow {
+    from {
+      transform: rotate(360deg);
+    }
+
+    to {
+      transform: rotate(0deg);
+    }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 20s linear infinite;
+  }
+
+  .animate-spin-reverse-slow {
+    animation: spin-reverse-slow 25s linear infinite;
+  }
+
+  /* Solana-style Grid Pattern - Exact from Solana.com */
+  .grid-pattern {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  .grid-pattern-sm {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 25px 25px;
+  }
+
+  .grid-pattern-lg {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 100px 100px;
   }
 }

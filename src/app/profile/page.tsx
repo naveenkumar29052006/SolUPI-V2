@@ -1,0 +1,337 @@
+'use client'
+
+import React, { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
+import { GlowingEffect } from '@/components/ui/effects/glowing-effect'
+import { User, Camera, ShieldCheck, Smartphone, Mail, LogOut, ChevronLeft } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+
+export default function ProfilePage() {
+    const router = useRouter()
+    const [formData, setFormData] = useState({
+        username: 'naveen_k',
+        firstName: 'Naveen',
+        lastName: 'Kumar',
+        email: 'nn03092005@gmail.com',
+        mobile: '+91 98765 43210'
+    })
+    const [isEditing, setIsEditing] = useState(false)
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleLogout = () => {
+        localStorage.removeItem('auth-token')
+        // Dispatch event to update Navbar immediately
+        window.dispatchEvent(new Event('auth-change'))
+        router.push('/login')
+    }
+
+    const [currentPage, setCurrentPage] = useState(1)
+    const itemsPerPage = 5
+
+    // Generate Mock Transactions
+    const allTransactions = React.useMemo(() => Array.from({ length: 25 }, (_, i) => ({
+        id: `TX${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+        date: new Date(Date.now() - i * 86400000).toISOString().split('T')[0],
+        type: i % 3 === 0 ? 'Sell' : 'Buy',
+        amount: i % 3 === 0 ? `${(Math.random() * 10000).toFixed(2)} INR` : `${(Math.random() * 500).toFixed(2)} USDC`,
+        status: i === 0 ? 'Processing' : 'Completed',
+    })), [])
+
+    const totalPages = Math.ceil(allTransactions.length / itemsPerPage)
+    const currentTransactions = allTransactions.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    )
+
+    return (
+        <div className="min-h-screen flex flex-col items-center px-4 py-20 pt-28 relative pointer-events-auto overflow-x-hidden bg-[#0a0a0a] gap-12">
+
+            {/* PROFILE CARD */}
+            <div className="w-full max-w-4xl relative z-10">
+                <div className="relative group filter drop-shadow-[0_0_10px_rgba(204,255,0,0.1)]">
+
+                    {/* Back Button */}
+                    <button
+                        onClick={() => router.push('/')}
+                        className="absolute -top-12 left-0 text-gray-400 hover:text-[#CCFF00] flex items-center gap-2 transition-colors z-20"
+                    >
+                        <ChevronLeft className="w-5 h-5" />
+                        Back
+                    </button>
+
+                    {/* Border/Background Layer */}
+                    <div
+                        className="absolute inset-0 bg-[#CCFF00]/30"
+                        style={{
+                            clipPath: "polygon(0 0, 200px 0, 230px 40px, 100% 40px, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%)"
+                        }}
+                    />
+
+                    {/* Inner Content Layer */}
+                    <div
+                        className="relative bg-[#0F0F0F]"
+                        style={{
+                            clipPath: "polygon(1px 1px, 199px 1px, 229px 41px, calc(100% - 1px) 41px, calc(100% - 1px) calc(100% - 31px), calc(100% - 31px) calc(100% - 1px), 1px calc(100% - 1px))",
+                            marginTop: "1px",
+                            marginLeft: "1px",
+                            marginRight: "1px",
+                            marginBottom: "1px",
+                            padding: "2rem",
+                            paddingTop: "4rem"
+                        }}
+                    >
+                        {/* Tab Content */}
+                        <div className="absolute top-0 left-0 w-[200px] h-[40px] flex items-center justify-center">
+                            <span className="text-[#CCFF00] font-bold tracking-wider text-sm">USER PROFILE</span>
+                        </div>
+
+                        <GlowingEffect
+                            proximity={100}
+                            spread={30}
+                            blur={2}
+                            borderWidth={2}
+                            movementDuration={1.5}
+                        />
+
+                        <div className="flex flex-col md:flex-row gap-8">
+                            {/* Left Column: Photo & KYC */}
+                            <div className="w-full md:w-1/3 flex flex-col items-center space-y-6 border-b md:border-b-0 md:border-r border-[#CCFF00]/10 pb-8 md:pb-0 md:pr-8">
+                                {/* Profile Photo */}
+                                <div className="relative group cursor-pointer">
+                                    <div className="w-32 h-32 rounded-full bg-[#141414] border-2 border-[#CCFF00] p-1 overflow-hidden relative">
+                                        <div className="w-full h-full rounded-full bg-gray-800 flex items-center justify-center overflow-hidden">
+                                            {/* Placeholder for user image */}
+                                            <User className="w-16 h-16 text-gray-400" />
+                                        </div>
+                                    </div>
+                                    <div className="absolute bottom-0 right-0 bg-[#CCFF00] p-2 rounded-full text-black shadow-lg hover:scale-110 transition-transform">
+                                        <Camera className="w-4 h-4" />
+                                    </div>
+                                </div>
+
+                                <div className="text-center space-y-3">
+                                    <div>
+                                        <h2 className="text-xl font-bold text-white">{formData.firstName} {formData.lastName}</h2>
+                                        <p className="text-sm text-gray-400">@{formData.username}</p>
+                                    </div>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="flex items-center gap-2 mx-auto text-red-500 hover:text-red-400 text-xs font-bold tracking-wider uppercase transition-colors px-4 py-2 border border-red-500/30 hover:border-red-500 rounded-lg bg-red-500/10"
+                                    >
+                                        <LogOut className="w-3 h-3" /> Logout
+                                    </button>
+                                </div>
+
+                                {/* KYC Status */}
+                                <div className="w-full bg-[#141414] border border-[#333] rounded-xl p-4 relative overflow-hidden group">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <ShieldCheck className="w-5 h-5 text-gray-500" />
+                                        <span className="text-gray-300 font-bold text-sm">KYC Verification</span>
+                                    </div>
+                                    <div className="absolute top-2 right-2 bg-[#CCFF00]/10 text-[#CCFF00] text-[10px] font-bold px-2 py-1 rounded border border-[#CCFF00]/20">
+                                        COMING SOON
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-2">
+                                        Identity verification features will be available shortly.
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Right Column: Details Form */}
+                            <div className="w-full md:w-2/3 space-y-6">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h3 className="text-[#CCFF00] font-bold text-lg tracking-wider">PERSONAL DETAILS</h3>
+                                    <button
+                                        onClick={() => setIsEditing(!isEditing)}
+                                        className="text-xs text-gray-400 hover:text-[#CCFF00] transition-colors"
+                                    >
+                                        {isEditing ? 'CANCEL' : 'EDIT DETAILS'}
+                                    </button>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-2 md:col-span-2">
+                                        <label className="text-gray-400 text-xs font-bold tracking-wider uppercase flex items-center gap-2">
+                                            <User className="w-3 h-3" /> Username
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            value={formData.username}
+                                            onChange={handleChange}
+                                            disabled={!isEditing}
+                                            className="w-full bg-[#141414] border border-[#333] focus:border-[#CCFF00] rounded-lg p-3 text-white text-sm outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-gray-400 text-xs font-bold tracking-wider uppercase flex items-center gap-2">
+                                            <User className="w-3 h-3" /> First Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="firstName"
+                                            value={formData.firstName}
+                                            onChange={handleChange}
+                                            disabled={!isEditing}
+                                            className="w-full bg-[#141414] border border-[#333] focus:border-[#CCFF00] rounded-lg p-3 text-white text-sm outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-gray-400 text-xs font-bold tracking-wider uppercase flex items-center gap-2">
+                                            <User className="w-3 h-3" /> Last Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="lastName"
+                                            value={formData.lastName}
+                                            onChange={handleChange}
+                                            disabled={!isEditing}
+                                            className="w-full bg-[#141414] border border-[#333] focus:border-[#CCFF00] rounded-lg p-3 text-white text-sm outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-gray-400 text-xs font-bold tracking-wider uppercase flex items-center gap-2">
+                                            <Mail className="w-3 h-3" /> Email Address
+                                        </label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            disabled={true}
+                                            className="w-full bg-[#141414] border border-[#333] focus:border-[#CCFF00] rounded-lg p-3 text-gray-400 text-sm outline-none transition-colors cursor-not-allowed opacity-50"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-gray-400 text-xs font-bold tracking-wider uppercase flex items-center gap-2">
+                                            <Smartphone className="w-3 h-3" /> Mobile Number
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            name="mobile"
+                                            value={formData.mobile}
+                                            onChange={handleChange}
+                                            disabled={!isEditing}
+                                            className="w-full bg-[#141414] border border-[#333] focus:border-[#CCFF00] rounded-lg p-3 text-white text-sm outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        />
+                                    </div>
+                                </div>
+
+                                {isEditing && (
+                                    <div className="pt-4 flex justify-end">
+                                        <button
+                                            onClick={() => setIsEditing(false)}
+                                            className="bg-[#CCFF00] text-black font-bold px-6 py-2 rounded-lg hover:bg-[#D4FF00] transition-colors text-sm uppercase tracking-wider"
+                                        >
+                                            Save Changes
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* TRANSACTIONS CARD */}
+            <div className="w-full max-w-4xl relative z-10 pb-20">
+                <div className="relative group filter drop-shadow-[0_0_10px_rgba(204,255,0,0.1)]">
+                    {/* Border/Background Layer */}
+                    <div
+                        className="absolute inset-0 bg-[#CCFF00]/30"
+                        style={{
+                            clipPath: "polygon(0 0, 250px 0, 280px 40px, 100% 40px, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%)"
+                        }}
+                    />
+
+                    {/* Inner Content Layer */}
+                    <div
+                        className="relative bg-[#0F0F0F]"
+                        style={{
+                            clipPath: "polygon(1px 1px, 249px 1px, 279px 41px, calc(100% - 1px) 41px, calc(100% - 1px) calc(100% - 31px), calc(100% - 31px) calc(100% - 1px), 1px calc(100% - 1px))",
+                            marginTop: "1px",
+                            marginLeft: "1px",
+                            marginRight: "1px",
+                            marginBottom: "1px",
+                            padding: "2rem",
+                            paddingTop: "4rem"
+                        }}
+                    >
+                        {/* Tab Content */}
+                        <div className="absolute top-0 left-0 w-[250px] h-[40px] flex items-center justify-center">
+                            <span className="text-[#CCFF00] font-bold tracking-wider text-sm">TRANSACTION HISTORY</span>
+                        </div>
+
+                        <div className="space-y-4">
+                            {currentTransactions.map((tx) => (
+                                <div key={tx.id} className="bg-[#141414] border border-[#333] rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 hover:border-[#CCFF00]/30 transition-colors group">
+                                    <div className="flex items-center gap-4 w-full md:w-auto">
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${tx.type === 'Buy' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                                            {tx.type === 'Buy' ? (
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+                                            ) : (
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <div className="text-white font-bold">{tx.type} {tx.amount}</div>
+                                            <div className="text-xs text-gray-500">{tx.date} • ID: {tx.id}</div>
+                                        </div>
+                                    </div>
+                                    <div className={`text-sm font-bold px-3 py-1 rounded-full border ${tx.status === 'Completed' ? 'border-green-500/20 bg-green-500/10 text-green-500' : 'border-yellow-500/20 bg-yellow-500/10 text-yellow-500'}`}>
+                                        {tx.status}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Pagination Controls */}
+                        <div className="flex items-center justify-between mt-8 pt-6 border-t border-[#333]">
+                            <button
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                disabled={currentPage === 1}
+                                className="px-4 py-2 rounded-lg bg-[#141414] border border-[#333] text-gray-400 hover:text-white hover:border-[#CCFF00] disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-bold uppercase tracking-wider"
+                            >
+                                Previous
+                            </button>
+
+                            <div className="flex items-center gap-2">
+                                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                                    <button
+                                        key={page}
+                                        onClick={() => setCurrentPage(page)}
+                                        className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold transition-all ${currentPage === page
+                                                ? 'bg-[#CCFF00] text-black'
+                                                : 'bg-[#141414] border border-[#333] text-gray-400 hover:border-[#CCFF00] hover:text-white'
+                                            }`}
+                                    >
+                                        {page}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <button
+                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                disabled={currentPage === totalPages}
+                                className="px-4 py-2 rounded-lg bg-[#141414] border border-[#333] text-gray-400 hover:text-white hover:border-[#CCFF00] disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-bold uppercase tracking-wider"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}

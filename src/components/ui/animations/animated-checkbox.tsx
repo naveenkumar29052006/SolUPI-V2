@@ -13,13 +13,13 @@ interface AnimatedCheckboxProps {
   disabled?: boolean
 }
 
-export function AnimatedCheckbox({ 
-  id, 
-  name, 
-  checked, 
-  onChange, 
-  label, 
-  disabled = false 
+export function AnimatedCheckbox({
+  id,
+  name,
+  checked,
+  onChange,
+  label,
+  disabled = false
 }: AnimatedCheckboxProps) {
   const handleChange = () => {
     if (!disabled) {
@@ -45,13 +45,13 @@ export function AnimatedCheckbox({
           disabled={disabled}
           className="sr-only"
         />
-        
+
         {/* Custom checkbox */}
         <motion.div
           className="h-4 w-4 rounded border-2 flex items-center justify-center"
           animate={{
-            backgroundColor: checked ? '#00FFA3' : 'rgba(255, 255, 255, 0.1)',
-            borderColor: checked ? '#00FFA3' : 'rgba(255, 255, 255, 0.3)',
+            backgroundColor: checked ? '#CCFF00' : 'rgba(255, 255, 255, 0.1)',
+            borderColor: checked ? '#CCFF00' : 'rgba(255, 255, 255, 0.3)',
             scale: checked ? 1.1 : 1
           }}
           transition={{
@@ -64,17 +64,17 @@ export function AnimatedCheckbox({
           <AnimatePresence>
             {checked && (
               <motion.div
-                initial={{ 
+                initial={{
                   scale: 0,
                   rotate: -90,
                   opacity: 0
                 }}
-                animate={{ 
+                animate={{
                   scale: 1,
                   rotate: 0,
                   opacity: 1
                 }}
-                exit={{ 
+                exit={{
                   scale: 0,
                   rotate: 90,
                   opacity: 0
@@ -92,10 +92,10 @@ export function AnimatedCheckbox({
           </AnimatePresence>
         </motion.div>
       </motion.div>
-      
+
       {/* Label */}
-      <label 
-        htmlFor={id} 
+      <label
+        htmlFor={id}
         className="ml-2 text-sm text-gray-300 cursor-pointer select-none"
         onClick={handleChange}
       >

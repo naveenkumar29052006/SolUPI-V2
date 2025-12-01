@@ -19,10 +19,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
 
   return (
-    <AppContext.Provider value= {{ user, setUser, orders, setOrders, loading, setLoading }
-}>
-  { children }
-  </AppContext.Provider>
+    <AppContext.Provider value={{ user, setUser, orders, setOrders, loading, setLoading }}>
+      {children}
+    </AppContext.Provider>
   );
 }
 

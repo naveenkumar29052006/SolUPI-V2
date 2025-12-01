@@ -8,9 +8,14 @@
 
 > **Bridge the gap between Fiat and Crypto with the speed of Solana and the convenience of UPI.**
 
+## 🎥 Background Animation Preview
+
+![Background Animation](frontend/public/preview.gif)
+
 ---
 
 ## 🌐 Live Demo
+
 
 | Component | URL |
 |-----------|-----|

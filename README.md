@@ -8,14 +8,19 @@
 
 > **Bridge the gap between Fiat and Crypto with the speed of Solana and the convenience of UPI.**
 
+## 🎥 Background Animation Preview
+
+![Background Animation](frontend/public/preview.gif)
+
 ---
 
 ## 🌐 Live Demo
 
+
 | Component | URL |
 |-----------|-----|
-| **Frontend** | [Insert Hosted Frontend URL] |
-| **Backend** | [Insert Hosted Backend URL] |
+| **Frontend** | https://sol-upi-v2.vercel.app |
+| **Backend** | https://solupi-backend.onrender.com |
 
 ---
 

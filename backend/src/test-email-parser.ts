@@ -1,4 +1,4 @@
-import { parseEmailContent } from './src/services/emailVerificationService';
+import { parseEmailContent } from './services/emailVerificationService';
 
 const emailSample = `
 Hi Naveen,

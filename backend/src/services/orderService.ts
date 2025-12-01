@@ -218,8 +218,16 @@ async function verifyUTRAndCompleteOrder(utrNumber) {
             return { success: false, error: 'UTR already used' };
         }
 
-        // 3. Verify Amount (Optional but recommended)
-        // if (emailTx.amount < order.amount) { ... }
+        // 3. Verify Amount - Critical security check!
+        // Allow small tolerance (1 INR) for rounding differences
+        const tolerance = 1;
+        if (emailTx.amount < (order.amount - tolerance)) {
+            console.log(`[Order Service] Amount mismatch: Email ${emailTx.amount} INR < Order ${order.amount} INR`);
+            return {
+                success: false,
+                error: `Payment amount (₹${emailTx.amount}) is less than order amount (₹${order.amount})`
+            };
+        }
 
         // 4. Mark EmailTransaction as used
         await prisma.emailTransaction.update({

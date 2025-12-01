@@ -19,7 +19,7 @@ import {
 
 import bs58 from 'bs58';
 
-const RPC_URL = process.env.RPC_URL || 'https://api.devnet.solana.com';
+const RPC_URL = process.env.SOLANA_RPC_URL || process.env.RPC_URL || 'https://api.devnet.solana.com';
 
 const SOLANA_NETWORK = process.env.SOLANA_NETWORK || 'devnet';
 

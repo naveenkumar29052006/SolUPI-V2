@@ -26,8 +26,8 @@ export default function Home() {
         </div>
 
         <div className="absolute bottom-8 left-6 right-6 z-10 flex flex-col items-start md:bottom-12 md:left-12 md:right-12 pointer-events-none">
-          <div className="pointer-events-auto">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[0.9] tracking-tighter uppercase mb-6 text-left font-monument">
+          <div className="pointer-events-auto w-full md:w-auto">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[0.9] tracking-tighter uppercase mb-6 text-left font-monument break-words">
               <motion.span
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -51,8 +51,8 @@ export default function Home() {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.8 }}
             >
-              <Link href="/swap">
-                <button className="group relative inline-flex items-center justify-center px-8 py-3 bg-[#CCFF00] text-black font-bold text-lg uppercase tracking-wider clip-path-button hover:bg-[#D4FF00] transition-all duration-300 hover:shadow-[0_0_30px_rgba(204,255,0,0.5)] font-monument">
+              <Link href="/swap" className="block w-full md:w-auto">
+                <button className="group relative inline-flex items-center justify-center px-8 py-3 bg-[#CCFF00] text-black font-bold text-lg uppercase tracking-wider clip-path-button hover:bg-[#D4FF00] transition-all duration-300 hover:shadow-[0_0_30px_rgba(204,255,0,0.5)] font-monument w-full md:w-auto">
                   <span className="relative z-10">BUY NOW</span>
                   <div className="absolute inset-0 bg-white/40 translate-x-full group-hover:translate-x-0 transition-transform duration-300 skew-x-12"></div>
                 </button>

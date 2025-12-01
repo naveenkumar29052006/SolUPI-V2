@@ -362,10 +362,10 @@ export default function SwapInterface() {
                       </div>
 
                       {/* Middle Swap Icon */}
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 hidden md:block">
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                         <button
                           onClick={handleSwapTokens}
-                          className="w-12 h-12 bg-[#0a0a0a] border border-[#CCFF00] rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300 shadow-[0_0_15px_rgba(204,255,0,0.3)]"
+                          className="w-12 h-12 bg-[#0a0a0a] border border-[#CCFF00] rounded-full flex items-center justify-center hover:scale-110 transition-transform duration-300 shadow-[0_0_15px_rgba(204,255,0,0.3)] rotate-90 md:rotate-0"
                         >
                           <ArrowRight className="w-5 h-5 text-[#CCFF00]" />
                         </button>
@@ -587,25 +587,62 @@ export default function SwapInterface() {
                       </button>
                     </div>
 
-                    {orderStatus === 'PROCESSING' ? (
-                      <div className="mb-8">
-                        <CircularTimer timeLeft={timeLeft} totalTime={300} size={160} strokeWidth={8} />
-                      </div>
-                    ) : (
-                      <div className={`w-24 h-24 rounded-full flex items-center justify-center mb-8 border ${orderStatus === 'COMPLETED' ? 'bg-[#CCFF00]/10 border-[#CCFF00]' :
-                        'bg-red-500/10 border-red-500'
-                        }`}>
-                        {orderStatus === 'COMPLETED' ? (
-                          <svg className="w-12 h-12 text-[#CCFF00]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
+                    <div className="h-40 flex items-center justify-center mb-8 relative">
+                      <AnimatePresence mode="wait">
+                        {orderStatus === 'PROCESSING' ? (
+                          <motion.div
+                            key="processing"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            transition={{ duration: 0.5 }}
+                          >
+                            <CircularTimer timeLeft={timeLeft} totalTime={300} size={160} strokeWidth={8} />
+                          </motion.div>
                         ) : (
-                          <svg className="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-                          </svg>
+                          <motion.div
+                            key="status-icon"
+                            initial={{ opacity: 0, scale: 0.5, rotate: -180 }}
+                            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 260,
+                              damping: 20
+                            }}
+                            className={`w-32 h-32 rounded-full flex items-center justify-center border-4 ${orderStatus === 'COMPLETED'
+                              ? 'bg-[#CCFF00]/10 border-[#CCFF00] shadow-[0_0_50px_rgba(204,255,0,0.3)]'
+                              : 'bg-red-500/10 border-red-500 shadow-[0_0_50px_rgba(239,68,68,0.3)]'
+                              }`}
+                          >
+                            {orderStatus === 'COMPLETED' ? (
+                              <motion.svg
+                                initial={{ pathLength: 0 }}
+                                animate={{ pathLength: 1 }}
+                                transition={{ duration: 0.5, delay: 0.2 }}
+                                className="w-16 h-16 text-[#CCFF00]"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </motion.svg>
+                            ) : (
+                              <motion.svg
+                                initial={{ pathLength: 0 }}
+                                animate={{ pathLength: 1 }}
+                                transition={{ duration: 0.5, delay: 0.2 }}
+                                className="w-16 h-16 text-red-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                              </motion.svg>
+                            )}
+                          </motion.div>
                         )}
-                      </div>
-                    )}
+                      </AnimatePresence>
+                    </div>
 
                     <h2 className="text-3xl font-bold text-white mb-4">
                       {orderStatus === 'COMPLETED' ? 'Payment Successful!' :

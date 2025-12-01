@@ -14,8 +14,8 @@
 
 | Component | URL |
 |-----------|-----|
-| **Frontend** | [Insert Hosted Frontend URL] |
-| **Backend** | [Insert Hosted Backend URL] |
+| **Frontend** | https://sol-upi-v2.vercel.app |
+| **Backend** | https://solupi-backend.onrender.com |
 
 ---
 

@@ -21,7 +21,9 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://localhost:3001/api/:path*',
+        destination: process.env.NODE_ENV === 'production'
+          ? 'https://solupi-backend.onrender.com/api/:path*'
+          : 'http://localhost:3001/api/:path*',
       },
     ];
   },

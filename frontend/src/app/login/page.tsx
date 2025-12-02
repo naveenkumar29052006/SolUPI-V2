@@ -19,7 +19,7 @@ export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [rememberMe, setRememberMe] = useState(false)
 
-    // Check if form is complete
+
     const isFormComplete = email && password
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -47,7 +47,7 @@ export default function LoginPage() {
                     if (data.user.walletAddr) {
                         localStorage.setItem("wallet-addr", data.user.walletAddr)
                     }
-                    // Dispatch event to update Navbar immediately
+                  
                     window.dispatchEvent(new Event('auth-change'))
                 }
                 toast({

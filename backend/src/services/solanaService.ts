@@ -184,7 +184,7 @@ async function transferUSDCToUser(recipientAddress, amountInUSDC) {
 
         console.log('📝 Getting or creating recipient token account...');
 
-        // Retry getting/creating token account
+
         const recipientTokenAccount = await withRetry(() => getOrCreateAssociatedTokenAccount(
             connection,
             platformWallet!,
@@ -195,7 +195,6 @@ async function transferUSDCToUser(recipientAddress, amountInUSDC) {
         const amountInSmallestUnits = Math.floor(amountInUSDC * 1000000);
         console.log('💰 Checking platform balance...');
 
-        // Retry getting balance
         const platformBalance = await withRetry(() => connection.getTokenAccountBalance(platformTokenAccount.address));
         const platformBalanceAmount = parseInt(platformBalance.value.amount);
 
@@ -208,7 +207,7 @@ async function transferUSDCToUser(recipientAddress, amountInUSDC) {
 
         console.log('🚀 Sending USDC transfer...');
 
-        // Retry transfer
+
         const signature = await withRetry(() => transfer(
             connection,
             platformWallet!,

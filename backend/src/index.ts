@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import cookieParser from 'cookie-parser'; // Added import for cookie-parser
+import cookieParser from 'cookie-parser'; 
 import authRoutes from './routes/auth';
 import orderRoutes from './routes/orders';
 import webhookRoutes from './routes/webhooks';
-import userRoutes from './routes/users'; // Added import for user routes
+import userRoutes from './routes/users'; 
 
 dotenv.config();
 
@@ -17,12 +17,12 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
-app.use(cookieParser()); // Added cookieParser middleware
+app.use(cookieParser()); 
 
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/webhooks', webhookRoutes);
-app.use('/api/users', userRoutes); // Added user routes
+app.use('/api/users', userRoutes); 
 
 app.get('/', (req, res) => {
     res.send('SolUPI Backend is running');
@@ -32,7 +32,7 @@ import { startEmailWatcher } from './services/emailWatcher';
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-    // Start the email watcher
+    
     startEmailWatcher();
 });
-// Restart trigger 2
+

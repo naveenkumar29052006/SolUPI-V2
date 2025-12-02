@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { GlowingEffect } from '@/components/ui/effects/glowing-effect'
-import { User, Camera, ShieldCheck, Smartphone, Mail, LogOut, ChevronLeft } from 'lucide-react'
+import { User, Camera, ShieldCheck, Smartphone, Mail, LogOut, ChevronLeft, Search, Filter, Calendar, ArrowUpDown, ChevronDown, X, Check } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
@@ -33,10 +33,39 @@ export default function ProfilePage() {
     }
 
     const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 5
+    const [itemsPerPage, setItemsPerPage] = useState(5)
     const [transactions, setTransactions] = useState<any[]>([])
     const [totalPages, setTotalPages] = useState(1)
+    const [totalItems, setTotalItems] = useState(0)
     const [isLoading, setIsLoading] = useState(true)
+
+    // Filter & Sort State
+    const [searchQuery, setSearchQuery] = useState('')
+    const [statusFilter, setStatusFilter] = useState('ALL')
+    const [dateFilter, setDateFilter] = useState('ALL')
+    const [sortBy, setSortBy] = useState('createdAt')
+    const [sortOrder, setSortOrder] = useState('desc')
+    const [showFilters, setShowFilters] = useState(false)
+
+    // Debounce search
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setCurrentPage(1)
+            fetchTransactions(1)
+        }, 500)
+        return () => clearTimeout(timer)
+    }, [searchQuery])
+
+    // Fetch on filter change
+    useEffect(() => {
+        setCurrentPage(1)
+        fetchTransactions(1)
+    }, [statusFilter, dateFilter, sortBy, sortOrder, itemsPerPage])
+
+    // Fetch on page change
+    useEffect(() => {
+        fetchTransactions(currentPage)
+    }, [currentPage])
 
     const fetchTransactions = async (page: number) => {
         const userId = localStorage.getItem('user-id')
@@ -47,11 +76,40 @@ export default function ProfilePage() {
 
         setIsLoading(true)
         try {
-            const response = await fetch(`/api/orders?userId=${userId}&page=${page}&limit=${itemsPerPage}`)
+            // Calculate date range based on filter
+            let startDate = ''
+            let endDate = ''
+            const now = new Date()
+
+            if (dateFilter === 'TODAY') {
+                startDate = new Date(now.setHours(0, 0, 0, 0)).toISOString()
+                endDate = new Date(now.setHours(23, 59, 59, 999)).toISOString()
+            } else if (dateFilter === 'WEEK') {
+                const lastWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+                startDate = lastWeek.toISOString()
+            } else if (dateFilter === 'MONTH') {
+                const lastMonth = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+                startDate = lastMonth.toISOString()
+            }
+
+            const queryParams = new URLSearchParams({
+                userId,
+                page: page.toString(),
+                limit: itemsPerPage.toString(),
+                status: statusFilter,
+                sortBy,
+                sortOrder,
+                ...(searchQuery && { search: searchQuery }),
+                ...(startDate && { startDate }),
+                ...(endDate && { endDate })
+            })
+
+            const response = await fetch(`/api/orders?${queryParams}`)
             const data = await response.json()
             if (data.success) {
                 setTransactions(data.data.orders)
                 setTotalPages(data.data.pagination.totalPages)
+                setTotalItems(data.data.pagination.total)
             }
         } catch (error) {
             console.error("Failed to fetch transactions:", error)
@@ -115,8 +173,8 @@ export default function ProfilePage() {
 
     useEffect(() => {
         fetchUser()
-        fetchTransactions(currentPage)
-    }, [currentPage])
+        // Initial fetch handled by other effects
+    }, [])
 
     const handleDelete = async (orderId: string) => {
         if (!confirm("Are you sure you want to delete this order?")) return;
@@ -392,6 +450,108 @@ export default function ProfilePage() {
                             <span className="text-[#CCFF00] font-bold tracking-wider text-sm">TRANSACTION HISTORY</span>
                         </div>
 
+                        {/* Controls Bar */}
+                        <div className="mb-6 space-y-4">
+                            <div className="flex flex-col md:flex-row gap-4 justify-between">
+                                {/* Search */}
+                                <div className="relative flex-1">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                    <input
+                                        type="text"
+                                        placeholder="Search by ID, UTR..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="w-full bg-[#141414] border border-[#333] focus:border-[#CCFF00] rounded-lg pl-10 pr-4 py-2 text-white text-sm outline-none transition-colors"
+                                    />
+                                </div>
+
+                                {/* Filter Toggle (Mobile) */}
+                                <button
+                                    onClick={() => setShowFilters(!showFilters)}
+                                    className="md:hidden flex items-center justify-center gap-2 bg-[#141414] border border-[#333] rounded-lg px-4 py-2 text-gray-400 hover:text-white"
+                                >
+                                    <Filter className="w-4 h-4" /> Filters
+                                </button>
+
+                                {/* Desktop Filters */}
+                                <div className={`flex flex-col md:flex-row gap-4 ${showFilters ? 'flex' : 'hidden md:flex'}`}>
+                                    {/* Status Filter */}
+                                    <div className="relative group/select">
+                                        <select
+                                            value={statusFilter}
+                                            onChange={(e) => setStatusFilter(e.target.value)}
+                                            className="appearance-none bg-[#141414] border border-[#333] focus:border-[#CCFF00] rounded-lg pl-4 pr-10 py-2 text-white text-sm outline-none cursor-pointer hover:border-gray-500 transition-colors w-full md:w-auto"
+                                        >
+                                            <option value="ALL">All Status</option>
+                                            <option value="PENDING">Pending</option>
+                                            <option value="COMPLETED">Completed</option>
+                                            <option value="FAILED">Failed</option>
+                                        </select>
+                                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                                    </div>
+
+                                    {/* Date Filter */}
+                                    <div className="relative group/select">
+                                        <select
+                                            value={dateFilter}
+                                            onChange={(e) => setDateFilter(e.target.value)}
+                                            className="appearance-none bg-[#141414] border border-[#333] focus:border-[#CCFF00] rounded-lg pl-4 pr-10 py-2 text-white text-sm outline-none cursor-pointer hover:border-gray-500 transition-colors w-full md:w-auto"
+                                        >
+                                            <option value="ALL">All Time</option>
+                                            <option value="TODAY">Today</option>
+                                            <option value="WEEK">Last 7 Days</option>
+                                            <option value="MONTH">Last 30 Days</option>
+                                        </select>
+                                        <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                                    </div>
+
+                                    {/* Sort Control */}
+                                    <button
+                                        onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
+                                        className="flex items-center justify-center gap-2 bg-[#141414] border border-[#333] hover:border-[#CCFF00] rounded-lg px-4 py-2 text-gray-400 hover:text-[#CCFF00] transition-colors"
+                                        title={`Sort ${sortOrder === 'asc' ? 'Ascending' : 'Descending'}`}
+                                    >
+                                        <ArrowUpDown className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Active Filters Summary */}
+                            {(statusFilter !== 'ALL' || dateFilter !== 'ALL' || searchQuery) && (
+                                <div className="flex flex-wrap gap-2 items-center">
+                                    <span className="text-xs text-gray-500">Active Filters:</span>
+                                    {statusFilter !== 'ALL' && (
+                                        <span className="text-xs bg-[#CCFF00]/10 text-[#CCFF00] px-2 py-1 rounded border border-[#CCFF00]/20 flex items-center gap-1">
+                                            {statusFilter}
+                                            <button onClick={() => setStatusFilter('ALL')}><X className="w-3 h-3" /></button>
+                                        </span>
+                                    )}
+                                    {dateFilter !== 'ALL' && (
+                                        <span className="text-xs bg-[#CCFF00]/10 text-[#CCFF00] px-2 py-1 rounded border border-[#CCFF00]/20 flex items-center gap-1">
+                                            {dateFilter}
+                                            <button onClick={() => setDateFilter('ALL')}><X className="w-3 h-3" /></button>
+                                        </span>
+                                    )}
+                                    {searchQuery && (
+                                        <span className="text-xs bg-[#CCFF00]/10 text-[#CCFF00] px-2 py-1 rounded border border-[#CCFF00]/20 flex items-center gap-1">
+                                            "{searchQuery}"
+                                            <button onClick={() => setSearchQuery('')}><X className="w-3 h-3" /></button>
+                                        </span>
+                                    )}
+                                    <button
+                                        onClick={() => {
+                                            setStatusFilter('ALL')
+                                            setDateFilter('ALL')
+                                            setSearchQuery('')
+                                        }}
+                                        className="text-xs text-gray-500 hover:text-white underline ml-2"
+                                    >
+                                        Clear All
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
                         <div className="space-y-4">
                             {isLoading ? (
                                 <div className="text-center text-gray-500 py-8">Loading transactions...</div>
@@ -438,28 +598,68 @@ export default function ProfilePage() {
                         </div>
 
                         {/* Pagination Controls */}
-                        <div className="flex items-center justify-between mt-8 pt-6 border-t border-[#333]">
-                            <button
-                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                                disabled={currentPage === 1}
-                                className="px-4 py-2 rounded-lg bg-[#141414] border border-[#333] text-gray-400 hover:text-white hover:border-[#CCFF00] disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-bold uppercase tracking-wider"
-                            >
-                                Previous
-                            </button>
-
-                            <div className="flex items-center gap-2">
-                                <span className="text-gray-400 text-sm">
-                                    Page {currentPage} of {totalPages}
+                        <div className="flex flex-col md:flex-row items-center justify-between mt-8 pt-6 border-t border-[#333] gap-4">
+                            <div className="flex items-center gap-4">
+                                <span className="text-gray-500 text-sm">
+                                    Showing <span className="text-white font-bold">{transactions.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}</span> to <span className="text-white font-bold">{Math.min(currentPage * itemsPerPage, totalItems)}</span> of <span className="text-white font-bold">{totalItems}</span>
                                 </span>
+                                <select
+                                    value={itemsPerPage}
+                                    onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                                    className="bg-[#141414] border border-[#333] rounded px-2 py-1 text-xs text-gray-400 focus:border-[#CCFF00] outline-none"
+                                >
+                                    <option value={5}>5 per page</option>
+                                    <option value={10}>10 per page</option>
+                                    <option value={20}>20 per page</option>
+                                    <option value={50}>50 per page</option>
+                                </select>
                             </div>
 
-                            <button
-                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                disabled={currentPage === totalPages}
-                                className="px-4 py-2 rounded-lg bg-[#141414] border border-[#333] text-gray-400 hover:text-white hover:border-[#CCFF00] disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-bold uppercase tracking-wider"
-                            >
-                                Next
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                    disabled={currentPage === 1}
+                                    className="px-4 py-2 rounded-lg bg-[#141414] border border-[#333] text-gray-400 hover:text-white hover:border-[#CCFF00] disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-bold uppercase tracking-wider"
+                                >
+                                    Previous
+                                </button>
+
+                                <div className="flex items-center gap-1">
+                                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                        // Simple pagination logic to show window around current page
+                                        let pageNum = i + 1;
+                                        if (totalPages > 5) {
+                                            if (currentPage > 3) {
+                                                pageNum = currentPage - 2 + i;
+                                            }
+                                            if (pageNum > totalPages) {
+                                                pageNum = totalPages - 4 + i;
+                                            }
+                                        }
+
+                                        return (
+                                            <button
+                                                key={pageNum}
+                                                onClick={() => setCurrentPage(pageNum)}
+                                                className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition-colors ${currentPage === pageNum
+                                                        ? 'bg-[#CCFF00] text-black'
+                                                        : 'bg-[#141414] border border-[#333] text-gray-400 hover:border-[#CCFF00] hover:text-white'
+                                                    }`}
+                                            >
+                                                {pageNum}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+
+                                <button
+                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                    disabled={currentPage === totalPages}
+                                    className="px-4 py-2 rounded-lg bg-[#141414] border border-[#333] text-gray-400 hover:text-white hover:border-[#CCFF00] disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm font-bold uppercase tracking-wider"
+                                >
+                                    Next
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

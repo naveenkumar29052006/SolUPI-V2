@@ -54,7 +54,17 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const { userId, page, limit, status } = req.query;
+        const {
+            userId,
+            page,
+            limit,
+            status,
+            search,
+            startDate,
+            endDate,
+            sortBy,
+            sortOrder
+        } = req.query;
 
         if (!userId) {
             return res.status(400).json({
@@ -66,7 +76,17 @@ router.get('/', async (req, res) => {
         const pageNum = parseInt(page as string) || 1;
         const limitNum = parseInt(limit as string) || 10;
 
-        const result = await getUserOrders(userId, pageNum, limitNum, status);
+        const result = await getUserOrders(
+            userId,
+            pageNum,
+            limitNum,
+            status as string | null,
+            search as string | null,
+            startDate as string | null,
+            endDate as string | null,
+            sortBy as string || 'createdAt',
+            sortOrder as string || 'desc'
+        );
 
         if (result.success) {
             return res.status(200).json({
@@ -94,7 +114,7 @@ router.get('/', async (req, res) => {
 router.delete('/:orderId', async (req, res) => {
     try {
         const { orderId } = req.params;
-        const { userId } = req.body; // We need userId to verify ownership
+        const { userId } = req.body;
 
         if (!orderId || !userId) {
             return res.status(400).json({
@@ -139,7 +159,7 @@ router.put('/:orderId/utr', async (req, res) => {
             });
         }
 
-        // Import updateOrderUTR dynamically or ensure it is exported from orderService
+
         const { updateOrderUTR } = require('../services/orderService');
         const result = await updateOrderUTR(orderId, utrNumber, userId);
 
@@ -182,7 +202,7 @@ router.get('/:orderId', async (req, res) => {
         } catch (error: any) {
             if (error.code === 'P1017') {
                 console.log("⚠️ Database connection closed (P1017), retrying...");
-                await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 order = await prisma.order.findUnique({
                     where: { id: orderId }
                 });

@@ -67,19 +67,58 @@ async function createOrderWithUser(userId, amount, walletAddress) {
 }
 
 
-async function getUserOrders(userId, page = 1, limit = 10, status = null) {
+async function getUserOrders(
+    userId,
+    page = 1,
+    limit = 10,
+    status = null,
+    search = null,
+    startDate = null,
+    endDate = null,
+    sortBy = 'createdAt',
+    sortOrder = 'desc'
+) {
     try {
         const skip = (page - 1) * limit;
         const whereClause: any = { userId: userId };
 
+        // Status filter
         if (status && status !== 'ALL') {
             whereClause.status = status;
         }
 
+        // Search filter (order ID, UTR, wallet address)
+        if (search && search.trim()) {
+            whereClause.OR = [
+                { id: { contains: search, mode: 'insensitive' } },
+                { utrNumber: { contains: search, mode: 'insensitive' } },
+                { walletAddr: { contains: search, mode: 'insensitive' } }
+            ];
+        }
+
+        // Date range filter
+        if (startDate || endDate) {
+            whereClause.createdAt = {};
+            if (startDate) {
+                whereClause.createdAt.gte = new Date(startDate);
+            }
+            if (endDate) {
+                // Include the entire end date by setting time to end of day
+                const endDateTime = new Date(endDate);
+                endDateTime.setHours(23, 59, 59, 999);
+                whereClause.createdAt.lte = endDateTime;
+            }
+        }
+
+        // Validate and set sorting
+        const validSortFields = ['createdAt', 'amount', 'status', 'updatedAt'];
+        const sortField = validSortFields.includes(sortBy) ? sortBy : 'createdAt';
+        const sortDirection = sortOrder === 'asc' ? 'asc' : 'desc';
+
         const [orders, totalCount] = await Promise.all([
             prisma.order.findMany({
                 where: whereClause,
-                orderBy: { createdAt: "desc" },
+                orderBy: { [sortField]: sortDirection },
                 skip: skip,
                 take: limit,
                 include: { user: true }

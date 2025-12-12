@@ -126,7 +126,8 @@ async function getUSDCBalance(walletAddress: string): Promise<{
             connection,
             platformWallet!,
             usdcMint,
-            walletPublicKey
+            walletPublicKey,
+            true // allowOwnerOffCurve
         );
 
 
@@ -189,7 +190,8 @@ async function transferUSDCToUser(recipientAddress, amountInUSDC) {
             connection,
             platformWallet!,
             usdcMint,
-            recipientPublicKey
+            recipientPublicKey,
+            true // allowOwnerOffCurve
         ));
 
         const amountInSmallestUnits = Math.floor(amountInUSDC * 1000000);

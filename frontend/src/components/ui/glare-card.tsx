@@ -53,16 +53,17 @@ export const GlareCard = ({
     };
 
     const updateStyles = () => {
-        if (refElement.current) {
-            console.log(state.current);
+        requestAnimationFrame(() => {
             const { background, rotate, glare } = state.current;
-            refElement.current?.style.setProperty("--m-x", `${glare.x}%`);
-            refElement.current?.style.setProperty("--m-y", `${glare.y}%`);
-            refElement.current?.style.setProperty("--r-x", `${rotate.x}deg`);
-            refElement.current?.style.setProperty("--r-y", `${rotate.y}deg`);
-            refElement.current?.style.setProperty("--bg-x", `${background.x}%`);
-            refElement.current?.style.setProperty("--bg-y", `${background.y}%`);
-        }
+            if (refElement.current) {
+                refElement.current.style.setProperty("--m-x", `${glare.x}%`);
+                refElement.current.style.setProperty("--m-y", `${glare.y}%`);
+                refElement.current.style.setProperty("--r-x", `${rotate.x}deg`);
+                refElement.current.style.setProperty("--r-y", `${rotate.y}deg`);
+                refElement.current.style.setProperty("--bg-x", `${background.x}%`);
+                refElement.current.style.setProperty("--bg-y", `${background.y}%`);
+            }
+        });
     };
     return (
         <div

@@ -1,20 +1,19 @@
-'use client'
-
 import "../styles/globals.css";
-import dynamic from 'next/dynamic';
 import { Navbar } from "@/components/navbar/header";
-import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
+import type { Metadata } from "next";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { ToastProvider } from "@/components/ui/toast";
 
-export default function RootLayout({ children }: { children: ReactNode }) {
-  const [mounted, setMounted] = useState(false)
+export const metadata: Metadata = {
+  title: "SolUPI - Buy USDC on Solana with UPI",
+  description: "The fastest and most affordable way to buy USDC on Solana using UPI.",
+};
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className="font-sans antialiased overflow-x-hidden bg-[#0a0a0a]" suppressHydrationWarning={true}>

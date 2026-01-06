@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from "react";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
@@ -7,8 +9,11 @@ export function SmoothScroll() {
 
     useEffect(() => {
         const lenis = new Lenis({
-            duration: 1.5,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            duration: 0.75, // Significantly faster duration (was 1.5)
+            // easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Default easing is usually fine, but let's keep it if we want that specific curve
+            smoothWheel: true,
+            wheelMultiplier: 1.2, // Slightly increase wheel speed
+            touchMultiplier: 2,
         });
 
         function raf(time: number) {

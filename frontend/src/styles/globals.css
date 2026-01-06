@@ -5,6 +5,84 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@font-face {
+  font-family: 'Monument Extended';
+  src: url('/fonts/MonumentExtended-FreeForPersonalUse/MonumentExtended-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Monument Extended';
+  src: url('/fonts/MonumentExtended-FreeForPersonalUse/MonumentExtended-Ultrabold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer utilities {
+  .font-monument {
+    font-family: 'Monument Extended', sans-serif;
+  }
+
+  .text-liquid-fill {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+    color: transparent;
+    background-image: linear-gradient(to top, #FFFFFF 45%, transparent 55%);
+    background-size: 100% 300%;
+    background-position: 0% 0%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: background-position 0.1s linear;
+  }
+}
+
+@keyframes grain {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  10% {
+    transform: translate(-5%, -10%);
+  }
+
+  20% {
+    transform: translate(-15%, 5%);
+  }
+
+  30% {
+    transform: translate(7%, -25%);
+  }
+
+  40% {
+    transform: translate(-5%, 25%);
+  }
+
+  50% {
+    transform: translate(-15%, 10%);
+  }
+
+  60% {
+    transform: translate(15%, 0%);
+  }
+
+  70% {
+    transform: translate(0%, 15%);
+  }
+
+  80% {
+    transform: translate(3%, 35%);
+  }
+
+  90% {
+    transform: translate(-10%, 10%);
+  }
+}
+
+
 /* Custom Variant */
 @custom-variant dark (&:is(.dark *));
 

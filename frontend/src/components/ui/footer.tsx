@@ -26,7 +26,7 @@ export function Footer() {
                     {/* Left Side: Logo & Copyright */}
                     <div className="mb-4 md:mb-0">
                         <h2 className="text-lg md:text-xl font-monument uppercase mb-2 tracking-tighter text-[#cbff00]">
-                            SOLUPI
+                            SolUpi
                         </h2>
                         <p className="text-[#cbff00] text-[8px] font-bold tracking-widest uppercase">
                             ©2024 ALL RIGHTS RESERVED

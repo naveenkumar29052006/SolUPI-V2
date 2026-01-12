@@ -10,7 +10,7 @@ const testimonials = [
         role: "DeFi Trader",
     },
     {
-        text: "SolUPI is a game changer for Indian crypto users. Instant settlement directly to my Phantom wallet.",
+        text: "SolUpi is a game changer for Indian crypto users. Instant settlement directly to my Phantom wallet.",
         image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
         name: "Rahul Sharma",
         role: "NFT Collector",
@@ -40,7 +40,7 @@ const testimonials = [
         role: "Day Trader",
     },
     {
-        text: "Best rates in the market. I checked against Binance and others, SolUPI wins every time.",
+        text: "Best rates in the market. I checked against Binance and others, SolUpi wins every time.",
         image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop",
         name: "Karan Verma",
         role: "HODLer",
@@ -86,7 +86,7 @@ export const Testimonials = () => {
                         What our <span className="text-[#CCFF00]">users say</span>
                     </h2>
                     <p className="text-center text-gray-400 text-lg">
-                        Join thousands of satisfied users trading on SolUPI.
+                        Join thousands of satisfied users trading on SolUpi.
                     </p>
                 </motion.div>
 

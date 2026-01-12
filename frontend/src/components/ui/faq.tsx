@@ -9,7 +9,7 @@ const faqs = [
 
     {
         question: "How fast are the transactions?",
-        answer: "Transactions on SolUPI are near-instant. Once your UPI payment is verified, the USDC is sent to your Solana wallet within seconds, thanks to the high speed of the Solana blockchain."
+        answer: "Transactions on SolUpi are near-instant. Once your UPI payment is verified, the USDC is sent to your Solana wallet within seconds, thanks to the high speed of the Solana blockchain."
     },
     {
         question: "Is KYC required?",
@@ -36,7 +36,7 @@ export function FAQ() {
                         FREQUENTLY ASKED <span className="text-[#CCFF00]">QUESTIONS</span>
                     </h2>
                     <p className="text-gray-400 max-w-2xl mx-auto">
-                        Everything you need to know about SolUPI and how it works.
+                        Everything you need to know about SolUpi and how it works.
                     </p>
                 </div>
 

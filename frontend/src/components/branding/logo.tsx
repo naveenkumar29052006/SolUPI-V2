@@ -3,8 +3,8 @@ import { cn } from '@/lib/utils'
 export const Logo = ({ className }: { className?: string }) => {
     return (
         <div className={cn('flex items-center', className)}>
-            <span className="font-monument text-2xl tracking-tighter text-white uppercase">
-                SOLUPI<span className="text-[#CCFF00]">.</span>
+            <span className="font-monument text-2xl tracking-tighter text-white">
+                SolUpi
             </span>
         </div>
     )

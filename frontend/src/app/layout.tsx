@@ -7,8 +7,11 @@ import { ToastProvider } from "@/components/ui/toast";
 import { Preloader } from "@/components/ui/preloader";
 
 export const metadata: Metadata = {
-  title: "SolUPI - Buy USDC on Solana with UPI",
+  title: "SolUpi - Buy USDC on Solana with UPI",
   description: "The fastest and most affordable way to buy USDC on Solana using UPI.",
+  icons: {
+    icon: '/favicon.png',
+  },
 };
 
 export default function RootLayout({

@@ -27,12 +27,12 @@ export default function Home() {
 
         <div className="absolute bottom-8 left-6 right-6 z-10 flex flex-col items-start md:bottom-12 md:left-12 md:right-12 pointer-events-none">
           <div className="pointer-events-auto w-full md:w-auto">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[0.9] tracking-tighter uppercase mb-6 text-left font-monument break-words">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-normal uppercase mb-6 text-left font-monument break-words">
               <motion.span
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="block mb-2 text-[#f0fbcd]"
+                className="block mb-4 text-[#f0fbcd]"
               >
                 BUY USDC ON SOLANA
               </motion.span>
@@ -72,7 +72,7 @@ export default function Home() {
           <div className="relative w-full aspect-[16/9] md:aspect-[2/1] flex items-center justify-center">
             <Image
               src="/ff.png"
-              alt="What is SolUPI Background"
+              alt="What is SolUpi Background"
               fill
               className="object-fill"
               priority
@@ -81,10 +81,10 @@ export default function Home() {
             {/* Content Overlay */}
             <div className="relative z-10 text-center px-8 md:px-20 max-w-4xl mx-auto">
               <h2 className="text-4xl md:text-6xl font-bold uppercase mb-6 text-[#f0fbcd] tracking-tighter font-monument">
-                WHAT IS <span className="text-[#CCFF00]">SOLUPI</span>
+                WHAT IS <span className="text-[#CCFF00]">SolUpi</span>
               </h2>
               <p className="text-white text-lg md:text-2xl leading-relaxed font-medium tracking-wide">
-                SolUPI is the fastest and most affordable way to buy USDC on Solana using UPI.
+                SolUpi is the fastest and most affordable way to buy USDC on Solana using UPI.
                 <br className="hidden md:block" />
                 It connects Indian UPI payments to Solana’s lightning-fast blockchain, enabling instant, trusted, and fully transparent USDC purchases without middlemen or inflated fees.
               </p>
@@ -98,7 +98,7 @@ export default function Home() {
         <div className="absolute inset-0 tech-grid opacity-20"></div>
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold uppercase mb-4 font-monument">WHY USE <span className="text-[#CCFF00]">SOLUPI?</span></h2>
+            <h2 className="text-4xl font-bold uppercase mb-4 font-monument">WHY USE <span className="text-[#CCFF00]">SolUpi?</span></h2>
             <p className="text-gray-400 max-w-2xl mx-auto">The most secure and efficient way to trade tokens directly.</p>
           </div>
 

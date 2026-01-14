@@ -42,6 +42,8 @@ export default function SwapInterface() {
   const [orderId, setOrderId] = useState<string | null>(null)
 
   const [orderStatus, setOrderStatus] = useState<'PROCESSING' | 'COMPLETED' | 'FAILED'>('PROCESSING')
+  const [isLongWait, setIsLongWait] = useState(false)
+
 
   // Timer Logic
   useEffect(() => {
@@ -160,7 +162,11 @@ export default function SwapInterface() {
 
     try {
       setIsSubmitting(true)
+      setIsLongWait(false)
+      const waitTimer = setTimeout(() => setIsLongWait(true), 3000)
+
       const response = await fetch("/api/orders", {
+
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -472,9 +478,14 @@ export default function SwapInterface() {
                     <div className="mt-8 flex justify-center">
                       <button
                         onClick={handleSwapNow}
-                        className="group relative inline-flex items-center justify-center px-12 py-4 bg-[#cbff00] text-black font-bold text-xl uppercase tracking-wider clip-path-button hover:shadow-[0_0_30px_rgba(203,255,0,0.5)] font-monument w-full md:w-auto rounded-xl transition-all duration-300"
+                        disabled={isSubmitting}
+                        className="group relative inline-flex items-center justify-center px-12 py-4 bg-[#cbff00] text-black font-bold text-xl uppercase tracking-wider clip-path-button hover:shadow-[0_0_30px_rgba(203,255,0,0.5)] font-monument w-full md:w-auto rounded-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
                       >
-                        <span className="relative z-10">SWAP NOW</span>
+                        <span className="relative z-10">
+                          {isSubmitting ? (
+                            isLongWait ? 'CONNECTING...' : 'PROCESSING...'
+                          ) : 'SWAP NOW'}
+                        </span>
                       </button>
                     </div>
 

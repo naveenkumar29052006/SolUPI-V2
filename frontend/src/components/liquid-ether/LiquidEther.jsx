@@ -33,6 +33,10 @@ export default function LiquidEther({
   const isVisibleRef = useRef(true);
   const resizeRafRef = useRef(null);
 
+
+
+
+
   useEffect(() => {
     if (!mountRef.current) return;
 
@@ -193,11 +197,11 @@ export default function LiquidEther({
           const currentTime = performance.now();
           const deltaTime = Math.min((currentTime - this.lastTime) / 16.67, 1);
           this.lastTime = currentTime;
-          
+
           // Smooth interpolation
           this.smoothCoords.lerp(this.targetCoords, this.smoothFactor * deltaTime);
           this.coords.copy(this.smoothCoords);
-          
+
           // Continue if still moving towards target
           const distance = this.smoothCoords.distanceTo(this.targetCoords);
           if (distance > 0.001) {

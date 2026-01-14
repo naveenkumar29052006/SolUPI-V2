@@ -9,6 +9,12 @@ export const Preloader = () => {
 
     // Progress simulation
     useEffect(() => {
+        // Wake up the backend on load
+        const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'https://solupi-backend.onrender.com';
+        fetch(backendUrl, { mode: 'no-cors' }).catch(() => {
+            // Ignore errors, just want to trigger wake-up
+        });
+
         let currentProgress = 0;
 
         // Fast start

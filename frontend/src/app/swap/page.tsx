@@ -32,6 +32,7 @@ export default function SwapInterface() {
   const [buyAmount, setBuyAmount] = useState<string>("")
   const [isSellDropdownOpen, setIsSellDropdownOpen] = useState(false)
   const [isBuyDropdownOpen, setIsBuyDropdownOpen] = useState(false)
+  const [exchangeRate, setExchangeRate] = useState(88.5);
   const [customWalletAddress, setCustomWalletAddress] = useState("")
 
   // Payment Flow State
@@ -101,12 +102,12 @@ export default function SwapInterface() {
     const amount = parseFloat(sellAmount)
     if (isNaN(amount)) return
 
-    const sellPrice = tokens[sellToken].price
-    const buyPrice = tokens[buyToken].price
-
-    // Conversion: (Amount * SellPrice) / BuyPrice
-    const converted = (amount * sellPrice) / buyPrice
-    setBuyAmount(converted.toFixed(4))
+    if (sellToken === 'INR' && buyToken === 'USDC') {
+      const amount = parseFloat(sellAmount);
+      // Use your fetched exchangeRate
+      const receivedUSDC = amount / exchangeRate;
+      setBuyAmount(receivedUSDC.toFixed(4));
+    }
   }, [sellAmount, sellToken, buyToken])
 
   // Load stored wallet on mount
@@ -116,6 +117,24 @@ export default function SwapInterface() {
       setCustomWalletAddress(stored)
     }
   }, [])
+
+  useEffect(() => {
+    const fetchPrice = async () => {
+      try {
+        const res = await fetch('http://localhost:3001/api/prices'); // Use your actual backend URL
+        const data = await res.json();
+        if (data.success) {
+          setExchangeRate(data.finalRate);
+        }
+      } catch (err) {
+        console.error("Failed to load price");
+      }
+    };
+    fetchPrice();
+    const interval = setInterval(fetchPrice, 30000);
+    return () => clearInterval(interval);
+
+  }, []);
 
   const handleSwapTokens = () => {
     setSellToken(buyToken)
@@ -248,6 +267,22 @@ export default function SwapInterface() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-5xl relative"
       >
+        {/* Network & Live Rate Indicator - Positioned relative to the main container, into the notch space */}
+        <div className="absolute top-0 left-[200px] flex items-center gap-4 z-30">
+          <div className="flex items-center gap-2 bg-[#0F0F0F] border border-[#CCFF00]/30 px-4 py-2 rounded-full shadow-[0_0_15px_rgba(204,255,0,0.15)]">
+            <div className="w-2 h-2 rounded-full bg-[#CCFF00] animate-pulse shadow-[0_0_8px_#CCFF00]" />
+            <span className="text-white text-sm font-bold font-mono tracking-wider">
+              1 USDC ≈ ₹{exchangeRate.toFixed(2)}
+            </span>
+          </div>
+
+          <div className="hidden md:flex items-center gap-2 bg-[#0F0F0F] border border-blue-500/30 px-4 py-2 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.15)]">
+            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_#3b82f6]" />
+            <span className="text-blue-400 text-sm font-bold font-mono tracking-wider">
+              SOLANA TESTNET
+            </span>
+          </div>
+        </div>
         {/* Cyberpunk Card Container */}
         <div className="relative group filter drop-shadow-[0_0_10px_rgba(204,255,0,0.1)]">
 
@@ -276,6 +311,8 @@ export default function SwapInterface() {
                 {step === 'input' ? 'TRADE DETAILS' : step === 'payment' ? 'PAYMENT' : ''}
               </span>
             </div>
+
+
 
             {/* Main Content Area */}
             <div className="pt-16 pb-8 px-8 md:px-12">

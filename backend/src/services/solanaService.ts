@@ -15,7 +15,7 @@ import {
     TOKEN_PROGRAM_ID
 
 } from '@solana/spl-token';
-
+import { getLiveUSDCPrice } from './priceService';
 
 import bs58 from 'bs58';
 
@@ -276,10 +276,10 @@ async function verifyTransaction(signature) {
 async function calculateUSDCAmount(inrAmount) {
     try {
 
-        const USD_TO_INR_RATE = parseFloat(process.env.USD_TO_INR_RATE || '83');
+         const priceData = await getLiveUSDCPrice();
+        const rate = priceData.finalRate;
 
-
-        const usdcAmount = inrAmount / USD_TO_INR_RATE;
+        const usdcAmount = inrAmount / rate;
 
         const roundedUSDC = Math.round(usdcAmount * 100) / 100;
 
@@ -287,7 +287,7 @@ async function calculateUSDCAmount(inrAmount) {
             success: true,
             usdcAmount: roundedUSDC,
             inrAmount: inrAmount,
-            rate: USD_TO_INR_RATE,
+            rate: rate,
             rateLastUpdated: new Date()
         };
 

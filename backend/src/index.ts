@@ -6,6 +6,7 @@ import authRoutes from './routes/auth';
 import orderRoutes from './routes/orders';
 import webhookRoutes from './routes/webhooks';
 import userRoutes from './routes/users'; 
+import priceRoutes from './routes/prices';
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/webhooks', webhookRoutes);
 app.use('/api/users', userRoutes); 
+app.use('/api/prices', priceRoutes); 
 
 app.get('/', (req, res) => {
     res.send('SolUPI Backend is running');
